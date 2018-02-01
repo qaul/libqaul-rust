@@ -6,4 +6,5 @@ authors = ["Katharina Fey <kookie@spacekookie.de>"]
 [dependencies]
 
 [build-dependencies]
-bindgen = "^0.32"
+bindgen = "*"
+cmake = "*"
