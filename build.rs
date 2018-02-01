@@ -12,8 +12,9 @@ fn main() {
     dst.push("src");
     dst.push("libqaul");
 
+    println!("###########################################: {}", dst.display());
     println!("cargo:rustc-link-search={}", dst.display());
-    println!("cargo:rustc-link-lib=libqaul");
+    println!("cargo:rustc-link-lib=qaul");
 
     // Tell cargo to tell rustc to link the system bzip2
     // shared library.
