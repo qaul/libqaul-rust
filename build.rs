@@ -6,10 +6,7 @@ use std::path::PathBuf;
 use cmake::Config;
 
 fn main() {
-
-    let mut dst = Config::new("qaul.net")
-                 .define("GUI", "CLI")
-                 .build();
+    let mut dst = Config::new("qaul.net").define("GUI", "CLI").build();
 
     dst.push("build");
     dst.push("src");
@@ -22,21 +19,18 @@ fn main() {
     // shared library.
     // println!("cargo:rustc-link-lib=libqaul");
 
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
-    // let bindings = bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
-        // .header("qaul.net/")
-        // Finish the builder and generate the bindings.
-        // .generate()
-        // Unwrap the Result and panic on failure.
-        // .expect("Unable to generate bindings");
+    let version = env!("CARGO_MANIFEST_DIR");
+    println!("###################### CURRENT DIRECTORY: {}", version);
 
-    // // Write the bindings to the $OUT_DIR/bindings.rs file.
-    // let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    // bindings
-    //     .write_to_file(out_path.join("bindings.rs"))
-    //     .expect("Couldn't write bindings!");
+    let bindings = bindgen::Builder::default()
+        .clang_arg(format!("-I{}", version))
+        .header("qaul/qaul.h")
+        .generate()
+        .expect("Unable to generate bindings");
+
+    // Write the bindings to the $OUT_DIR/bindings.rs file.
+    let path = PathBuf::from("src/bindings/");
+    bindings
+        .write_to_file(path.join("qaul.rs"))
+        .expect("Couldn't write bindings!");
 }
