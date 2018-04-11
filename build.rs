@@ -1,18 +1,30 @@
 extern crate bindgen;
 extern crate cmake;
 
+use cmake::Config;
 use std::env;
 use std::path::PathBuf;
-use cmake::Config;
 
 fn main() {
+    Command::new("git")
+        .args(&["submodule", "init"])
+        .status()
+        .unwrap();
+    Command::new("git")
+        .args(&["submodule", "update"])
+        .status()
+        .unwrap();
+
     let mut dst = Config::new("qaul.net").define("GUI", "CLI").build();
 
     dst.push("build");
     dst.push("src");
     dst.push("libqaul");
 
-    println!("###########################################: {}", dst.display());
+    println!(
+        "###########################################: {}",
+        dst.display()
+    );
     println!("cargo:rustc-link-search={}", dst.display());
     println!("cargo:rustc-link-lib=qaul");
 
